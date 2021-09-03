@@ -26,7 +26,8 @@ namespace OstaraDemo {
             string sbConnectionString = config.GetConnectionString("ServiceBus")
                 .Replace("{{SHARED_SERVICEBUS_KEY}}", Environment.GetEnvironmentVariable("SHARED_SERVICEBUS_KEY"));
 
-            var queueClient = new ServiceBusClient(sbConnectionString, new ServiceBusClientOptions{ TransportType = ServiceBusTransportType.AmqpWebSockets });
+            // The TransportType may need to be set to "ServiceBusTransportType.AmqpWebSockets" depending on your corporate firewall configuration
+            var queueClient = new ServiceBusClient(sbConnectionString, new ServiceBusClientOptions{ TransportType = ServiceBusTransportType.AmqpTcp });
             var receiver = queueClient.CreateReceiver(config.GetValue<string>("IncomingQueueName"));
             var sender = queueClient.CreateSender(config.GetValue<string>("OutgoingQueueName"));
             
